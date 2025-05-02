@@ -1,0 +1,47 @@
+find_grants:
+  description: >
+    Find relevant federal grant opportunities that match Health Tech Alley's mission.
+    You MUST ensure that all included grants have application deadlines in the future — strictly after today’s date.
+
+    Instructions:
+    - Check the current date at runtime.
+    - Only include grants where `deadline > today`.
+    - Discard any grant with a missing, invalid, or past deadline.
+    - Validate each deadline as a real date object, not just a string.
+    - If any expired grant is found after generation, regenerate the entire list from scratch.
+
+    Use only up-to-date sources (updated within the last 24 hours) and ensure that all grants are still open and valid.
+
+  expected_output: >
+    A list of at least 5 current (non-expired) federal grant opportunities with:
+    - Title
+    - Link
+    - Fit score (1–10)
+    - Deadline
+    - Summary
+
+  agent: grant_writer
+
+review_grants:
+  description: >
+    Review the list of grants. Add details about application requirements and next steps.
+  expected_output: >
+    The same list with added:
+    - Application process
+    - First steps needed
+    - Any warnings or blockers
+  agent: grant_reviewer
+
+organize_grants:
+  description: >
+    Organize the reviewed grants into a clear, bullet-point report sorted by deadline.
+  expected_output: >
+    A clean, well-structured markdown report.
+  agent: grants_coordinator
+
+finalize_and_email:
+  description: >
+    Finalize and polish the markdown report. Then email it to my boss at jane@example.com.
+  expected_output: >
+    Email successfully sent with the report attached or in body.
+  agent: grants_administrator
