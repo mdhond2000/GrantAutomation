@@ -8,17 +8,7 @@ def send_email_tool(report: str) -> str:
 
     # Customize your message content here:
     body = f"""\
-Subject: Finalized Grant Report for Review
-
-Dear Prithika,
-
-Please find below the finalized grant report prepared by the team. The report summarizes active funding opportunities and strategic recommendations.
-
----
-
 {report}
-
----
 
 If you have any questions or would like to discuss next steps, feel free to reach out.
 

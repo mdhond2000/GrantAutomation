@@ -11,6 +11,36 @@ find_grants:
     - If any expired grant is found after generation, regenerate the entire list from scratch.
 
     Use only up-to-date sources (updated within the last 24 hours) and ensure that all grants are still open and valid.
+     Before retrieving any grants:
+    - ALWAYS check the current date at runtime.
+    - NEVER include any grant where the application deadline is today or in the past.
+    - Use the logic: IF grant.deadline > today THEN include ELSE discard.
+    - Discard any grant with missing or unparseable deadline data.
+    - Validate every deadline is a date object, not a string.
+    - If any expired grants are found post-generation, regenerate the list from scratch.
+
+    You must only use up-to-date data (updated within the past 24 hours).
+    Expired or outdated grants MUST NEVER appear, even for reference.
+    You are an expert grant-sourcing assistant who specializes in pulling only active, relevant federal grants from sources like Grants.gov, SAM.gov, NIH, and HRSA.
+    Before listing any grant opportunity, you MUST dynamically check the current system date at runtime.
+
+    Only include grants where:
+    - The `application deadline` is strictly later than the current date.
+    - If the deadline is today or in the past, discard it immediately.
+    - If the deadline is missing or unparseable, exclude it.
+    
+    Use proper date comparison logic:
+    ```
+    if grant.deadline > today:
+        include it
+    else:
+        discard it
+    ```
+    Today's date should be automatically retrieved during the run. Do NOT rely on hardcoded or cached values. 
+    Always use the actual system date at runtime. After building the list, double-check all entries to confirm 
+    their deadlines are still valid (i.e., in the future). If any are expired, regenerate the list.
+     Your output must only contain fresh, valid, actionable grants that HTA can still apply for.
+
 
   expected_output: >
     A list of at least 5 current (non-expired) federal grant opportunities with:
@@ -24,12 +54,75 @@ find_grants:
 
 review_grants:
   description: >
-    Review the list of grants. Add details about application requirements and next steps.
+    The Grant Reviewer plays a critical role in not only validating the relevance of grant opportunities but also in meticulously evaluating each aspect of the application process to ensure Health Tech Alley can effectively and efficiently pursue funding. Beyond simply reviewing application instructions, the Grant Reviewer goes a step further in dissecting all aspects of the grant to ensure it is both feasible and strategically aligned with Health Tech Alley's mission. This thorough review process encompasses multiple elements that allow for smooth execution and mitigate potential challenges early in the application process.
+      1. Eligibility and Compliance Assessment:
+    A critical first step in the review process is ensuring that Health Tech Alley meets all eligibility criteria outlined by the grant provider. This can include evaluating whether the organization fits within specific industry categories (e.g., healthcare technology, nonprofit sector), location-based eligibility, or even special requirements based on past projects or organizational size. If any eligibility issue is identified, the reviewer must provide a detailed analysis and highlight whether a waiver is possible, or if a different opportunity might be a better fit.
+    Example: Some grants may restrict applicants to only US-based organizations, or those who are working with underserved populations in healthcare. The reviewer will evaluate if Health Tech Alley's mission aligns with these criteria.
+      2. Detailed Application Process Verification:
+    The Grant Reviewer ensures that each grant’s application process is well-documented and that all application materials are required or optional. They will review:
+    Required Documents: Ensure that Health Tech Alley has the necessary internal resources (e.g., financial statements, organizational tax forms, project outlines) to meet the documentation requirements.
+    Submission Method: Review whether the application requires online submission, physical delivery, or a hybrid of both. They’ll also assess if there are any platform-specific instructions (e.g., through a government portal or email submission).
+    Evaluation Criteria: Identify how the grant evaluator will assess applications (e.g., based on innovation, impact, or scalability). This allows Health Tech Alley to tailor their proposal to highlight these strengths.
+    Example: A reviewer would confirm if a grant uses a digital submission portal such as Grants.gov, ensuring the organization is familiar with the platform’s requirements and deadlines.
+      3. Understanding Funding Restrictions:
+    Many federal grants come with restrictions on how funds can be used. The Grant Reviewer must dissect these restrictions carefully to determine whether Health Tech Alley’s intended use of the grant funds is compliant. Restrictions might include:
+    Restricted Budget Categories: Some grants only allow funding for direct project costs, such as research or equipment, and exclude indirect costs like overhead or salaries.
+    Geographic Restrictions: Certain grants are only available for projects in specific regions or states.
+    Duration of Funding: Some grants are for one-time funding, while others may offer multi-year funding, but with stipulations on annual renewal processes.
+    Example: A grant may specify that the funds can only be used for new technology development, excluding any costs related to marketing or salaries. The reviewer ensures that Health Tech Alley is prepared to allocate funds accordingly.
+      4. Deadline Monitoring and Strategic Timing:
+    The reviewer needs to confirm that all grants in the list have valid deadlines and that they are not approaching too quickly for Health Tech Alley to gather all necessary materials. This involves checking:
+    Deadline Window: Ensure there is enough time to prepare a comprehensive application, keeping in mind that some grants require lengthy documentation and other preparatory materials.
+    Grant Cycle Timing: Some grants follow an annual or biannual cycle, and the reviewer will track whether the current cycle aligns with Health Tech Alley's project timelines.
+    Application Submission Restrictions: Certain grants may not allow applications to be submitted after a specific time zone deadline or during certain months. The reviewer must validate the exact deadline time, considering potential timezone differences.
+    Example: A grant application deadline for July 1st may have to be submitted by June 30th 11:59 PM PT. The reviewer would alert the team if they are not aligned with this deadline.
+      5. Alignment with Organizational Objectives and Impact Potential:
+    The Grant Reviewer ensures that each grant aligns with Health Tech Alley’s mission and objectives. This includes examining how the goals of the grant match the projects that Health Tech Alley intends to fund. The reviewer also evaluates the impact potential of the grant. For example:
+    Impact Metrics: Grants often require applicants to outline the expected impact of their projects. The reviewer assesses if Health Tech Alley has the means to quantify the results and meet the funders’ expectations.
+    Sustainability and Scalability: Some grants may require projects to demonstrate long-term sustainability or scalability. The reviewer will ensure that Health Tech Alley can meet these expectations, or if not, they’ll suggest alternatives.
+    Example: If a grant’s goal is to improve digital health literacy in underrepresented communities, the reviewer will assess if Health Tech Alley can measure and report on the increase in literacy, as required by the grant.
+      6. Red Flags and Risk Management:
+    The Grant Reviewer looks for red flags that could indicate potential issues with the grant, including:
+    History of Funding Delays: If the funding body has a history of delays in fund disbursement, the reviewer will flag this as a potential risk, especially for projects requiring immediate funding.
+    Confusing or Ambiguous Language: If the grant terms are written vaguely or ambiguously, the reviewer will raise questions and seek clarifications, ensuring that Health Tech Alley is not exposed to future legal issues.
+    Example: A grant may promise funding but has a history of delays, leading to the risk that the funds may not be available when needed. The reviewer will assess whether this poses a risk for the organization.
+      7. Financial Reporting and Accountability:
+    Grants often require regular financial reporting to ensure that funds are being used correctly. The reviewer will examine:
+    Reporting Requirements: What type of financial documentation will Health Tech Alley need to provide during or after the project’s completion? Is there a need for interim reports?
+    Audit Clauses: Some grants require organizations to undergo an audit to ensure that funds were used appropriately. The reviewer will ensure Health Tech Alley is prepared for such requirements and has the internal systems to track and report expenditures.
+    Example: Some grants require quarterly financial reports, and if Health Tech Alley does not have a system in place to track spending, the reviewer will flag the need for a financial tracking system.
+
   expected_output: >
-    The same list with added:
-    - Application process
-    - First steps needed
-    - Any warnings or blockers
+    A numbered list of grant opportunities with the following structure for each:
+
+
+    1. [Grant Title]
+    Deadline: [Due date]
+    Fit Score: [1–10]
+    Summary: A 2–3 sentence overview of the grant purpose and how it aligns with Health Tech Alley's mission.
+
+
+    Application Process:
+    - Clearly describe the application method (e.g., online portal, email submission, paper-based).
+    - List all required documents or application materials.
+    - Mention the review timeline, who reviews it (if relevant), and how long decisions typically take.
+
+
+    First Steps Needed:
+    - Outline the immediate action items Health Tech Alley must take to initiate the application.
+    - Mention drafting tasks, registration steps, document gathering, or partner confirmations.
+
+
+    Warnings/Blockers:
+    - Highlight any eligibility issues, limitations on funding usage, competitive risks, or technical requirements.
+    - Mention submission or process delays (e.g., postal deadlines for paper applications).
+
+
+    Final Notes:
+    The completed list should include grants that are timely and provide actionable steps.
+    Make sure that risks and requirements are clearly called out to inform decision-making.
+    The report must be professionally written, clearly structured, and ready for executive review.
+
   agent: grant_reviewer
 
 organize_grants:
@@ -41,7 +134,49 @@ organize_grants:
 
 finalize_and_email:
   description: >
-    Finalize and polish the markdown report. Then email it to my boss at jane@example.com.
+    Finalize and polish the  report with clear section headings, bullet points, 
+    and summary. The report should be formatted in using the following structure. 
+    Make sure to bold headings and ensure that the reciepent is addressed as Greg. 
+    Put this information as a report into a Google Document and include it in the
+    email:
+
+    ## Executive Summary
+     A 2–3 sentence overview of key grant opportunities.
+
+
+    ## Top Opportunities
+    List top 3 grants with:
+    - Title (as a markdown link)
+    - Deadline
+    - Summary
+    - Why this is a good fit
+
+
+    ## Full Opportunity List
+    Include a table or bullet list of all grants with:
+    - Title
+    - Link
+    - Deadline
+    - Summary
+
+
+    Ensure that language is concise, professional, and clearly formatted. Finalize and polish the report with clear section headings, bullet points, and a concise summary.
+    Use numbered formatting instead of markdown subheadings, and ensure that each grant is clearly labeled.
+    Address the email to Greg and include a link to a Google Doc with the formatted content.
+    Use professional, precise language appropriate for executive review.
+
+
+    Your final answer will be emailed to Greg, so it must be polished and accurate.
+
   expected_output: >
-    Email successfully sent with the report attached or in body.
+    A finalized grant report in markdown format and a downloadable Google Doc link.
+    The report should contain:
+    1. An Executive Summary (2–3 sentences)
+    2. A numbered list of Top 3 Opportunities with: Title, Deadline, Summary, Why it fits
+    3. A Full Opportunity List with a numbered list of all grants and their details
+
+
+    The email to Greg should include a brief message, and the report should be suitable for copy-pasting or linking as-is.
+
   agent: grants_administrator
+
