@@ -4,7 +4,7 @@ def send_email_tool(report: str) -> str:
 
     sender = "mdd013002@gmail.com"
     password = "oeymqkoyejkxpmnb"  # Gmail App Password
-    recipient = "pmohanraj@healthtechalley.org"
+    recipient = "gmiller@healthtechalley.org"
 
     # Customize your message content here:
     body = f"""\
